@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-"""app.py to connect to API"""
+"""app.py to connect to API
+"""
+import os
+import sys
 from api.vi.views import app_views
 from flask import Flask
-import os
 from models import storage
 
 
