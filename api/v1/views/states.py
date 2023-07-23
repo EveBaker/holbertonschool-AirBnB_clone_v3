@@ -1,4 +1,12 @@
 #!/usr/bin/python3
+"""
+Create a new view for State objects that handles 
+all default RESTFul API actions.
+GET
+DELETE
+POST
+PUT
+"""
 from flask import Blueprint, jsonify, request, abort
 from models import State
 
