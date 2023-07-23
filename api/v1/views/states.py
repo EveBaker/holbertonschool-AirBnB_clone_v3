@@ -1,14 +1,8 @@
 #!/usr/bin/python3
 from flask import Blueprint, jsonify, request, abort
 from models import State
-"""
-Create a new view for State objects that handles 
-all default RESTFul API actions.
-GET
-DELETE
-POST
-PUT
-"""
+"""Create a new view for State objects that handles 
+all default RESTFul API actions"""
 
 bp = Blueprint('states', __name__)
 
