@@ -5,6 +5,8 @@ from flask import Blueprint, jsonify, request, abort
 from models import State
 
 
+bp = Blueprint('states', __name__)
+
 
 @bp.route('/states', methods=['GET'])
 def get_states():
