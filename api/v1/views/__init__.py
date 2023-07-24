@@ -1,13 +1,19 @@
 #!/usr/bin/python3
-"""Initialize Blueprint views"""
-from flask import Flask
-from .views import bp
+"""init BP views"""
+import json
+from api.v1.views import states_bp
+from api.v1.views.states import *
 
 
-def create_app():
-    app = Flask(__name__)
+def load_states():
+    with open('states.json', 'r') as f:
+        data = json.load(f)
 
-    # Import and register the blueprint
-    app.register_blueprint(bp)
+    for state in data:
+        state.create(name=state['name'])
 
-    return app
+
+def init_app(app):
+    app.register_blueprint(states_bp)
+    
+    load_states()
