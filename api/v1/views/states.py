@@ -3,8 +3,6 @@
 all default RESTFul API actions"""
 from flask import Blueprint, jsonify, request, abort
 from models import State
-from models import storage
-from api.v1.views import app_views
 
 
 bp = Blueprint('states', __name__)

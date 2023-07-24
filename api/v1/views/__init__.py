@@ -9,7 +9,7 @@ def load_states():
         data = json.load(f)
 
     for state in data:
-        state.create(name=state['name'])
+        State.create(name=state['name'])
 
 
 def init_app(app):
