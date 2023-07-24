@@ -1,12 +1,10 @@
 #!/usr/bin/python3
-"""cities.py"""
-
-from api.v1.views import app_views
-from flask import abort, jsonify, make_response, request
-from models import storage
+""" objects that handles all default RestFul API actions for cities """
 from models.city import City
 from models.state import State
-
+from models import storage
+from api.v1.views import app_views
+from flask import abort, jsonify, make_response, request
 
 @app_views.route('/states/<state_id>/cities', methods=['GET'])
 def get_cities(state_id):
