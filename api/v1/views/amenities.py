@@ -2,7 +2,7 @@
 """Create a new view for Amenity objects
 that handles all default RESTFul API actions:"""
 from api.v1.views import app_views
-from flask import abort, jsonify, make_response, request
+from flask import abort, jsonify, request
 from models import storage
 from models.amenity import Amenity
 
