@@ -10,14 +10,9 @@ from models.user import User
 
 
 @app_views.route('/api/v1/cities/<int:city_id>/places', methods=['GET'])
-def get_places(city_id):
-    "list all places"
-    city = City.query.get(city_id)
-    if not city:
-        abort(404)
-    places = city.places
+def get_places():
+    places = Place.query.all()
     return jsonify([place.to_dict() for place in places]), 200
-
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
 def get_place(place_id):
