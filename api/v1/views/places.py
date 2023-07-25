@@ -2,12 +2,19 @@
 """Create a new view for Place objectsthat
 handles all default RESTFul API actions:"""
 
+<<<<<<< HEAD
+from flask import request, jsonify, abort
+from app.models import Place, City, User
+from api.v1.views import app
+from api.v1.views import app_views
+=======
 from api.v1.views import app_views
 from flask import abort, jsonify, make_response, request
 from models import storage
 from models.city import City
 from models.place import Place
 from models.user import User
+>>>>>>> 4952f6502d87e8eb00d4fc4dd53b24b9f98db1d1
 
 
 @app_views.route('/api/v1/cities/<int:city_id>/places', methods=['GET'])
