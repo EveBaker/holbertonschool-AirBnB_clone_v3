@@ -12,7 +12,9 @@ from api.v1.views import app_views
 def get_states():
     """list all infor for all states"""
     states = storage.all(State).values()
-    states_json = [state.to_dict() for state in states]
+    states_json = []
+    for state in states:
+        states_json = state.to_dict() 
     return jsonify(states_json)
 
 
