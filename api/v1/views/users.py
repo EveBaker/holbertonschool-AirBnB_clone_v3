@@ -49,14 +49,15 @@ def post_user():
     return make_response(jsonify(user.to_dict()), 201)
 
 
-@app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
+@app_views.route('/users/<string:user_id>', methods=['PUT'],
+                 strict_slashes=False)
 def put_user(user_id):
-    """ Updates a User object """
-    user = storage.get(User, user_id)
-    if not user:
+    """update a user"""
+    user = storage.get("User", user_id)
+    if user is None:
         abort(404)
     if not request.get_json():
-        abort(400, description="Not a JSON")
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
     for attr, val in request.get_json().items():
         if attr not in ['id', 'email', 'created_at', 'updated_at']:
             setattr(user, attr, val)
