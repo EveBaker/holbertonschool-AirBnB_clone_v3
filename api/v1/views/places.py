@@ -30,6 +30,18 @@ def get_place(place_id):
     return jsonify(place.to_dict()), 200
 
 
+@app_views.route('/places/<string:place_id>',
+                 methods=['DELETE'], strict_slashes=False)
+def delete_place(place_id):
+    """deletes a place by id"""
+    place = storage.get("Place", place_id)
+    if place is None:
+        abort(404)
+    place.delete()
+    storage.save()
+    return (jsonify({}))
+
+
 @app_views.route('/api/v1/places', methods=['POST'])
 def post_place():
     """make a place"""
@@ -77,15 +89,3 @@ def put_place(place_id):
     place.save()
 
     return jsonify(place.to_dict()), 200
-
-
-@app_views.route('/places/<string:place_id>',
-                 methods=['DELETE'], strict_slashes=False)
-def delete_place(place_id):
-    """deletes a place by id"""
-    place = storage.get("Place", place_id)
-    if place is None:
-        abort(404)
-    place.delete()
-    storage.save()
-    return (jsonify({}))
