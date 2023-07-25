@@ -10,16 +10,21 @@ from models.user import User
 
 
 @app_views.route('/api/v1/cities/<int:city_id>/places', methods=['GET'])
-def get_places():
-    places = Place.query.all()
+def get_places(city_id):
+    "list all places"
+    city = City.query.get(city_id)
+    if not city:
+        abort(400)
+    places = city.places
     return jsonify([place.to_dict() for place in places]), 200
+
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
 def get_place(place_id):
     """get place by id"""
     place = Place.query.get(place_id)
     if not place:
-        abort(404)
+        abort(400)
     return jsonify(place.to_dict()), 200
 
 
@@ -33,7 +38,7 @@ def post_place():
         abort(400, message='Missing user_id')
     user = User.query.get(data['user_id'])
     if not user:
-        abort(404, message='User not found')
+        abort(400, message='User not found')
     if 'name' not in data:
         abort(400, message='Missing name')
     place = Place(
@@ -53,7 +58,7 @@ def put_place(place_id):
         abort(400, message='Not a JSON')
     place = Place.query.get(place_id)
     if not place:
-        abort(404, message='Place not found')
+        abort(400, message='Place not found')
     for key, value in data.items():
         if key in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
             continue
