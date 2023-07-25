@@ -9,9 +9,8 @@ from models.user import User
 from flask import jsonify, abort, request
 
 
-
 @app_views.route("/places/<place_id>/reviews",
-                    methods=["GET"], strict_slashes=False)
+                methods=["GET"], strict_slashes=False)
 def retrieves_all_reviews(place_id):
     """ receives review"""
     place = storage.get(Place, place_id)
@@ -25,7 +24,7 @@ def retrieves_all_reviews(place_id):
 
 
 @app_views.route("/reviews/<review_id>", 
-                    methods=["GET"], strict_slashes=False)
+                methods=["GET"], strict_slashes=False)
 def get_reviews(review_id):
     """returns an object by id"""
     review = storage.get(Review, review_id)
@@ -68,7 +67,8 @@ def create_review(place_id):
     return jsonify(new_review.to_dict()), 201
 
 
-@app_views.route("/reviews/<review_id>", methods=["PUT"], strict_slashes=False)
+@app_views.route("/reviews/<review_id>",
+                methods=["PUT"], strict_slashes=False)
 def update_review(review_id):
     """Updates an object by its id"""
     review_data = request.get_json()
