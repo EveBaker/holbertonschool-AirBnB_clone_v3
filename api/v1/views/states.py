@@ -11,10 +11,8 @@ from api.v1.views import app_views
                  methods=['GET'], strict_slashes=False)
 def get_states():
     """list all infor for all states"""
-    states = State.query.all()
-    states_json = []
-    for state in states:
-        states_json.append(state.to_dict())
+    states = storage.all(State).values()
+    states_json = [state.to_dict() for state in states]
     return jsonify(states_json)
 
 
@@ -23,9 +21,9 @@ def get_states():
 def get_state(state_id):
     """get state information for specified state"""
     state = storage.get("State", state_id)
-    if state is None:
-        abort(404)
-    return jsonify(state.to_dict())
+    if state is not None:
+        return jsonify(state.to_dict())
+    abort(404)
 
 
 @app_views.route('/states/<string:state_id>',
@@ -33,11 +31,11 @@ def get_state(state_id):
 def delete_state(state_id):
     """deletes a state by state_id"""
     state = storage.get("State", state_id)
-    if state is None:
-        abort(404)
-    state.delete(state)
-    storage.save()
-    return (jsonify({}))
+    if state is not None:
+        state.delete(state)
+        storage.save()
+        return jsonify({})
+    abort(404)
 
 
 @app_views.route('/states/',
@@ -57,13 +55,13 @@ def post_state():
                  methods=['PUT'], strict_slashes=False)
 def put_state(state_id):
     """update a state"""
-    state = storage.get("State", state_id)
+    state = storage.get(State, state_id)
     if state is None:
         abort(404)
     if not request.get_json():
-        return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    for attr, val in request.get_json().items():
-        if attr not in ['id', 'created_at', 'updated_at']:
-            setattr(state, attr, val)
+        abort(400, 'Not a JSON')
+    for key, value in request.get_json().items():
+        if key not in ['id', 'created_at', 'updated_at']:
+            setattr(state, key, value)
     state.save()
     return jsonify(state.to_dict())
