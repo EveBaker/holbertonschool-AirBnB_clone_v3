@@ -12,7 +12,7 @@ from flask import jsonify, abort, request
 @app_views.route("/places/<place_id>/reviews",
                 methods=["GET"], strict_slashes=False)
 def retrieves_all_reviews(place_id):
-    """ receives review"""
+    """receives review"""
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
