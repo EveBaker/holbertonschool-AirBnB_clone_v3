@@ -18,11 +18,9 @@ class State(BaseModel, Base):
     else:
         name = ""
 
-
     def __init__(self, *args, **kwargs):
         """initializes state"""
         super().__init__(*args, **kwargs)
-
 
     if models.storage_t != "db":
         @property
