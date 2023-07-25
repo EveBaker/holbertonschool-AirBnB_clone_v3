@@ -11,27 +11,28 @@ from models.user import User
 
 @app_views.route('/api/v1/cities/<int:city_id>/places', methods=['GET'])
 def get_places(city_id):
-    """get place information for all places in a specified city"""
-    city = storage.get("City", city_id)
-    if city is None:
+    "list all places"
+    city = City.query.get(city_id)
+    if not city:
         abort(404)
-    places = []
-    for place in city.places:
-        places.append(place.to_dict())
-    return jsonify(places)
+
+    places = city.places
+    return jsonify([place.to_dict() for place in places]), 200
 
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
 def get_place(place_id):
+    """get place by id"""
     place = Place.query.get(place_id)
     if not place:
-        abort(404, message='Place not found')
+        abort(404)
 
     return jsonify(place.to_dict()), 200
 
 
 @app_views.route('/api/v1/places', methods=['POST'])
-def create_place():
+def post_place():
+    """make a place"""
     data = request.get_json()
     if not data:
         abort(400, message='Not a JSON')
@@ -57,7 +58,8 @@ def create_place():
 
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['PUT'])
-def update_place(place_id):
+def put_place(place_id):
+    """update a place by id"""
     data = request.get_json()
     if not data:
         abort(400, message='Not a JSON')
@@ -75,3 +77,15 @@ def update_place(place_id):
     place.save()
 
     return jsonify(place.to_dict()), 200
+
+
+@app_views.route('/places/<string:place_id>',
+                 methods=['DELETE'], strict_slashes=False)
+def delete_place(place_id):
+    """deletes a place by id"""
+    place = storage.get("Place", place_id)
+    if place is None:
+        abort(404)
+    place.delete()
+    storage.save()
+    return (jsonify({}))
