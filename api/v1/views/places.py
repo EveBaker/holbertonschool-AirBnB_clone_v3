@@ -14,7 +14,7 @@ def get_places(city_id):
     "list all places"
     city = City.query.get(city_id)
     if not city:
-        abort(400)
+        abort(404)
     places = city.places
     return jsonify([place.to_dict() for place in places]), 200
 
@@ -24,7 +24,7 @@ def get_place(place_id):
     """get place by id"""
     place = Place.query.get(place_id)
     if not place:
-        abort(400)
+        abort(404)
     return jsonify(place.to_dict()), 200
 
 
@@ -38,13 +38,19 @@ def post_place():
         abort(400, message='Missing user_id')
     user = User.query.get(data['user_id'])
     if not user:
-        abort(400, message='User not found')
+        abort(404, message='User not found')
     if 'name' not in data:
         abort(400, message='Missing name')
     place = Place(
         name=data['name'],
         user_id=data['user_id'],
-        city_id=data['city_id']
+        city_id=data['city_id'],
+        number_rooms=data['number_rooms'],
+        number_bathrooms=data['number_bathrooms'],
+        max_guest=data['max_guest'],
+        price_by_night=data['price_by_night'],
+        latitude=data['latitude'],
+        longitude=data['longitude']
     )
     place.save()
     return jsonify(place.to_dict()), 201
@@ -58,7 +64,7 @@ def put_place(place_id):
         abort(400, message='Not a JSON')
     place = Place.query.get(place_id)
     if not place:
-        abort(400, message='Place not found')
+        abort(404, message='Place not found')
     for key, value in data.items():
         if key in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
             continue
