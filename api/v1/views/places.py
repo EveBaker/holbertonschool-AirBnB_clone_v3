@@ -15,7 +15,6 @@ def get_places(city_id):
     city = City.query.get(city_id)
     if not city:
         abort(404)
-
     places = city.places
     return jsonify([place.to_dict() for place in places]), 200
 
@@ -26,20 +25,7 @@ def get_place(place_id):
     place = Place.query.get(place_id)
     if not place:
         abort(404)
-
     return jsonify(place.to_dict()), 200
-
-
-@app_views.route('/places/<string:place_id>',
-                 methods=['DELETE'], strict_slashes=False)
-def delete_place(place_id):
-    """deletes a place by id"""
-    place = storage.get("Place", place_id)
-    if place is None:
-        abort(404)
-    place.delete()
-    storage.save()
-    return (jsonify({}))
 
 
 @app_views.route('/api/v1/places', methods=['POST'])
@@ -48,24 +34,19 @@ def post_place():
     data = request.get_json()
     if not data:
         abort(400, message='Not a JSON')
-
     if 'user_id' not in data:
         abort(400, message='Missing user_id')
-
     user = User.query.get(data['user_id'])
     if not user:
         abort(404, message='User not found')
-
     if 'name' not in data:
         abort(400, message='Missing name')
-
     place = Place(
         name=data['name'],
         user_id=data['user_id'],
         city_id=data['city_id']
     )
     place.save()
-
     return jsonify(place.to_dict()), 201
 
 
@@ -75,17 +56,12 @@ def put_place(place_id):
     data = request.get_json()
     if not data:
         abort(400, message='Not a JSON')
-
     place = Place.query.get(place_id)
     if not place:
         abort(404, message='Place not found')
-
     for key, value in data.items():
         if key in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
             continue
-
         setattr(place, key, value)
-
     place.save()
-
     return jsonify(place.to_dict()), 200
