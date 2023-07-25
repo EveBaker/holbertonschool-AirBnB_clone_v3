@@ -24,6 +24,7 @@ def get_user(user_id):
         abort(404)
     return jsonify(user.to_dict())
 
+
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
 def delete_user(user_id):
     """ Deletes a User object """
@@ -33,6 +34,7 @@ def delete_user(user_id):
     storage.delete(user)
     storage.save()
     return make_response(jsonify({}), 200)
+
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
 def post_user():
@@ -46,6 +48,7 @@ def post_user():
     user = User(**request.get_json())
     user.save()
     return make_response(jsonify(user.to_dict()), 201)
+
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
 def put_user(user_id):
