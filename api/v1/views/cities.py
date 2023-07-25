@@ -11,7 +11,7 @@ from models.city import City
 def get_cities(state_id):
     state = storage.get(State, state_id)
     if not state:
-        abort(404)
+        abort(400)
     return jsonify([city.to_dict() for city in state.cities])
 
 
@@ -19,7 +19,7 @@ def get_cities(state_id):
 def get_city(city_id):
     city = storage.get(City, city_id)
     if not city:
-        abort(404)
+        abort(400)
     return jsonify(city.to_dict())
 
 
@@ -27,7 +27,7 @@ def get_city(city_id):
 def delete_city(city_id):
     city = storage.get(City, city_id)
     if not city:
-        abort(404)
+        abort(400)
     storage.delete(city)
     storage.save()
     return jsonify({}), 200
@@ -37,7 +37,7 @@ def delete_city(city_id):
 def create_city(state_id):
     state = storage.get(State, state_id)
     if not state:
-        abort(404)
+        abort(400)
     if not request.get_json():
         abort(400, 'Not a JSON')
     if 'name' not in request.get_json():
@@ -51,7 +51,7 @@ def create_city(state_id):
 def update_city(city_id):
     city = storage.get(City, city_id)
     if not city:
-        abort(404)
+        abort(400)
     if not request.get_json():
         abort(400, 'Not a JSON')
     for key, value in request.get_json().items():
