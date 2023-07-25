@@ -22,13 +22,15 @@ def get_places(city_id):
             return abort(404)
 
 
-@app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
+@app_views.route('/api/v1/places/<int:place_id>',
+                 methods=['GET'], strict_slashes=False)
 def get_place(place_id):
-    """get place by id"""
-    place = Place.query.get(place_id)
-    if not place:
-        abort(404)
-    return jsonify(place.to_dict()), 200
+    if place_id:
+        place = storage.get(Place, place_id)
+        if place:
+            return jsonify(place.to_dict())
+        else:
+            return abort(404)
 
 
 @app_views.route('/api/v1/places', methods=['POST'])
