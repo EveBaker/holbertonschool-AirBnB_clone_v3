@@ -11,12 +11,14 @@ from models.user import User
 
 @app_views.route('/api/v1/cities/<int:city_id>/places', methods=['GET'])
 def get_places(city_id):
-    city = City.query.get(city_id)
-    if not city:
-        abort(404, message='City not found')
-
-    places = city.places
-    return jsonify([place.to_dict() for place in places]), 200
+    """get place information for all places in a specified city"""
+    city = storage.get("City", city_id)
+    if city is None:
+        abort(404)
+    places = []
+    for place in city.places:
+        places.append(place.to_dict())
+    return jsonify(places)
 
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
