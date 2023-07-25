@@ -11,11 +11,10 @@ from api.v1.views import app_views
                  methods=['GET'], strict_slashes=False)
 def get_states():
     """list all infor for all states"""
-    states = State.query.all()
-    states_json = []
-    for state in states:
-        states_json.append(state.to_dict())
+    states = storage.all(State).values()
+    states_json = [state.to_dict() for state in states]
     return jsonify(states_json)
+
 
 @app_views.route('/states/<state_id>',
                  methods=['GET'], strict_slashes=False)
