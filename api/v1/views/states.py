@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Create a new view for State objects that handles
 all default RESTFul API actions:"""
-from flask import jsonify, request, abort, make_response
+from flask import jsonify, request, abort
 from models import storage
 from models.state import State
 from api.v1.views import app_views
@@ -10,11 +10,12 @@ from api.v1.views import app_views
 @app_views.route('/states',
                  methods=['GET'], strict_slashes=False)
 def get_states():
-    """get all info for all states"""
-    states = []
-    for state in storage.all("State").values():
-        states.append(state.to_dict())
-    return jsonify(states)
+    """list all infor for all states"""
+    states = State.query.all()
+    states_json = []
+    for state in states:
+        states_json.append(state.to_dict())
+    return jsonify(states_json)
 
 
 @app_views.route('/states/<string:state_id>',
