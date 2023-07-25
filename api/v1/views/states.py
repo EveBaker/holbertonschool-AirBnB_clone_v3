@@ -16,7 +16,7 @@ def get_states():
     return jsonify(states_json)
 
 
-@app_views.route('/states/<string:state_id>',
+@app_views.route('/states/<state_id>',
                  methods=['GET'], strict_slashes=False)
 def get_state(state_id):
     """get state information for specified state"""
@@ -26,7 +26,7 @@ def get_state(state_id):
     abort(404)
 
 
-@app_views.route('/states/<string:state_id>',
+@app_views.route('/states/<state_id>',
                  methods=['DELETE'], strict_slashes=False)
 def delete_state(state_id):
     """deletes a state by state_id"""
