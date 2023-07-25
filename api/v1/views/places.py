@@ -18,6 +18,7 @@ def get_places(city_id):
     places = city.places
     return jsonify([place.to_dict() for place in places]), 200
 
+
 @app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
 def get_place(place_id):
     place = Place.query.get(place_id)
@@ -25,6 +26,7 @@ def get_place(place_id):
         abort(404, message='Place not found')
 
     return jsonify(place.to_dict()), 200
+
 
 @app_views.route('/api/v1/places', methods=['POST'])
 def create_place():
@@ -50,6 +52,7 @@ def create_place():
     place.save()
 
     return jsonify(place.to_dict()), 201
+
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['PUT'])
 def update_place(place_id):
