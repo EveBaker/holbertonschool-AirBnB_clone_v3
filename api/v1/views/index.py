@@ -4,6 +4,15 @@ from api.v1.views import app_views
 from flask import Flask, Blueprint, jsonify
 from models import storage
 
+hbnbText = {
+    "amenities": "Amenity",
+    "cities": "City",
+    "places": "Place",
+    "reviews": "Review",
+    "states": "State",
+    "users": "User"
+}
+
 
 @app_views.route('/status', strict_slashes=False)
 def hbnbStatus():
@@ -11,15 +20,14 @@ def hbnbStatus():
     return jsonify({"status": "OK"})
 
 
-bp = Blueprint('stats', __name__)
+@app_views.route('/stats', strict_slashes=False)
+def hbnbStats():
+    """hbnbStats"""
+    return_dict = {}
+    for key, value in hbnbText.items():
+        return_dict[key] = storage.count(value)
+        return jsonify(return_dict)
 
 
-@bp.route('/stats', strict_slashes=False)
-def stats():
-    """retrieves the number of each kind of obj by type"""
-    stats = {}
-    for cls in storage.classes():
-        stats[cls.__name__] = storage.count(cls)
-    return jsonify(stats)
-
-app_views.register_blueprint(bp)
+if __name__ == "__main__":
+    pass
