@@ -4,6 +4,7 @@ This module contains the index for the RESTful API
 """
 from flask import jsonify
 from api.v1.views import app_views
+from models import storage
 
 
 @app_views.route('/status')
@@ -25,3 +26,6 @@ def stats():
         "User": "users"
     }
     return jsonify({k: storage.count(v) for k, v in classes.items()})
+
+if __name__ == "__main__":
+    pass
