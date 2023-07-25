@@ -22,9 +22,9 @@ def get_amenities():
 def get_amenity(amenity_id):
     """get amenity information for specified amenity"""
     amenity = storage.get("Amenity", amenity_id)
-    if amenity is None:
-        abort(404)
-    return jsonify(amenity.to_dict())
+    if amenity:
+        return jsonify(amenity.to_dict())
+    abort(404)
 
 
 @app_views.route('/amenities/<string:amenity_id>',
