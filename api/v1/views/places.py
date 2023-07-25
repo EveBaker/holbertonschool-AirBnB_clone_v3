@@ -13,24 +13,20 @@ from models.user import User
                  methods=['GET'], strict_slashes=False)
 def get_places(city_id):
     "list all places"
-    if city_id:
-        city = storage.get(City, city_id)
-        if city is not None:
-            placeList = [place.to_dict() for place in city.places]
-            return jsonify(placeList)
-        else:
-            return abort(404)
+    city = City.query.get(city_id)
+    if not city:
+        abort(404)
+    places = city.places
+    return jsonify([place.to_dict() for place in places]), 200
 
 
-@app_views.route('/api/v1/places/<int:place_id>',
-                 methods=['GET'], strict_slashes=False)
+@app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
 def get_place(place_id):
-    if place_id:
-        place = storage.get(Place, place_id)
-        if place:
-            return jsonify(place.to_dict())
-        else:
-            return abort(404)
+    """get place by id"""
+    place = Place.query.get(place_id)
+    if not place:
+        abort(404)
+    return jsonify(place.to_dict()), 200
 
 
 @app_views.route('/api/v1/places', methods=['POST'])
