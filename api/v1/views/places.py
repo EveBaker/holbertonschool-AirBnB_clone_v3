@@ -9,14 +9,17 @@ from models.place import Place
 from models.user import User
 
 
-@app_views.route('/api/v1/cities/<int:city_id>/places', methods=['GET'])
+@app_views.route('/api/v1/cities/<int:city_id>/places',
+                 methods=['GET'], strict_slashes=False)
 def get_places(city_id):
     "list all places"
-    city = City.query.get(city_id)
-    if not city:
-        abort(404)
-    places = city.places
-    return jsonify([place.to_dict() for place in places]), 200
+    if city_id:
+        city = storage.get(City, city_id)
+        if city is not None:
+            placeList = [place.to_dict() for place in city.places]
+            return jsonify(placeList)
+        else:
+            return abort(404)
 
 
 @app_views.route('/api/v1/places/<int:place_id>', methods=['GET'])
@@ -44,13 +47,7 @@ def post_place():
     place = Place(
         name=data['name'],
         user_id=data['user_id'],
-        city_id=data['city_id'],
-        number_rooms=data['number_rooms'],
-        number_bathrooms=data['number_bathrooms'],
-        max_guest=data['max_guest'],
-        price_by_night=data['price_by_night'],
-        latitude=data['latitude'],
-        longitude=data['longitude']
+        city_id=data['city_id']
     )
     place.save()
     return jsonify(place.to_dict()), 201
