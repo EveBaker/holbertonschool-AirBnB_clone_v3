@@ -2,7 +2,6 @@
 """index.py to connect to API """
 from api.v1.views import app_views
 from flask import jsonify
-from models import storage
 
 
 hbnbText = {
@@ -21,14 +20,16 @@ def hbnbStatus():
     return jsonify({"status": "OK"})
 
 
-@app_views.route('/stats', strict_slashes=False)
-def hbnbStats():
-    """hbnbStats"""
-    return_dict = {}
-    for key, value in hbnbText.items():
-        return_dict[key] = storage.count(value)
-    return jsonify(return_dict)
-
-
-if __name__ == "__main__":
-    pass
+@app_views.route('/stats')
+def stats():
+    """returns API stats"""
+    from models import storage
+    classes = {
+        "Amenity": "amenities",
+        "City": "cities",
+        "Place": "places",
+        "Review": "reviews",
+        "State": "states",
+        "User": "users"
+    }
+    return jsonify({k: storage.count(v) for k, v in classes.items()})
